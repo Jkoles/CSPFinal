@@ -1,0 +1,43 @@
+<?php
+//process.php
+if ($_SERVER["REQUEST_METHOD"] == "POST") 
+    {//Check it is coming from a form
+    
+		//mysql credentials
+    $mysql_host = "localhost";
+    $mysql_username = "joekkoller";
+    $mysql_password = "Saberjoe12!!";
+    $mysql_database = "food";
+	
+	//delcare PHP variables
+	
+	$firstname = $_POST["firstname"];
+	$food = $_POST["food"];
+	$Howmany = $_POST["How many"];
+	
+	//Open a new connection to the MySQL server
+	//see https://www.sanwebe.com/2013/03/basic-php-mysqli-usage for more info
+	$mysqli = new mysqli($mysql_host, $mysql_username, $mysql_password, $mysql_database);
+	
+	//Output any connection error
+	if ($mysqli->connect_error) {
+		die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
+	}   
+	
+		$statement = $mysqli->prepare("INSERT INTO student (firstname, food, HowMany) VALUES(?, ?, ?)"); //prepare sql insert query
+		//bind parameters for markers, where (s = string, i = integer, d = double,  b = blob)
+		$statement->bind_param('sss', $firstname, $food, $HowMany); //bind value
+		if($statement->execute())
+			{
+				//print output text
+				echo nl2br("Hello "." ". $firstname . "! We are so glad you decided to eat with us ". $Food.  "\r\nYour ". $Food ."is being prepared.", false);
+			}
+			else{
+					print $mysqli->error; //show mysql error if any 
+				}
+
+         }
+else{
+    echo ("error");
+    }         
+?>
